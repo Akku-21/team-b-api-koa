@@ -1,0 +1,29 @@
+import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
+
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'UUID Validator API',
+    version: '1.0.0',
+    description: 'API for validating and managing UUIDs with JSON schemas'
+  },
+  servers: [
+    {
+      url: 'http://localhost:3000',
+      description: 'Local development server'
+    }
+  ]
+};
+
+const options = {
+  swaggerDefinition,
+  apis: [
+    path.join(__dirname, '../routes/*.ts'), 
+    path.join(__dirname, '../controllers/*.ts')
+  ]
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+export default swaggerSpec;
