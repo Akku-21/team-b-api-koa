@@ -5,7 +5,7 @@ const router = new Router();
 
 /**
  * @openapi
- * /validate/{uuid}:
+ * /api/validate/{uuid}:
  *   get:
  *     summary: Validate a UUID
  *     description: Checks if a UUID is valid, not expired, and not resolved
@@ -44,7 +44,7 @@ router.get('/validate/:uuid', validateUUID);
 
 /**
  * @openapi
- * /create:
+ * /api/create:
  *   post:
  *     summary: Create a new UUID entry
  *     description: Creates a new UUID entry with a JSON schema and expiration

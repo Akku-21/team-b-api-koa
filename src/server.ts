@@ -3,7 +3,6 @@ import Router from '@koa/router';
 import bodyParser from 'koa-bodyparser';
 import serve from 'koa-static';
 import path from 'path';
-import fs from 'fs';
 
 import connectDB from './config/database';
 import uuidRoutes from './routes/uuidRoutes';
