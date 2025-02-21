@@ -10,7 +10,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: 'https://team-b-api-koa-production.up.railway.app',
       description: 'Local development server'
     }
   ]
