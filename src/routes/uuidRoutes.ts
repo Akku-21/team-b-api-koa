@@ -1,92 +1,142 @@
-import Router from '@koa/router';
-import { validateUUID, createUUIDEntry } from '../controllers/uuidController';
-
-const router = new Router();
-
 /**
  * @openapi
- * /api/validate/{uuid}:
- *   get:
- *     summary: Validate a UUID
- *     description: Checks if a UUID is valid, not expired, and not resolved
- *     parameters:
- *       - in: path
- *         name: uuid
- *         required: true
- *         schema:
+ * components:
+ *   schemas:
+ *     UUIDEntry:
+ *       type: object
+ *       properties:
+ *         guid:
  *           type: string
- *           format: uuid
- *     responses:
- *       200:
- *         description: UUID is valid
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 valid:
- *                   type: boolean
- *                 jsonSchema:
- *                   type: object
- *       404:
- *         description: UUID is invalid, expired, or already resolved
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 valid:
- *                   type: boolean
- *                 message:
- *                   type: string
+ *         timestamp:
+ *           type: number
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *     UUIDEntryResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         data:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/UUIDEntry'
+ *         message:
+ *           type: string
  */
-router.get('/validate/:uuid', validateUUID);
 
 /**
  * @openapi
- * /api/create:
+ * /api/getAllGuids:
+ *   get:
+ *     summary: Get all GUIDs
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
+ *       '500':
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
+ */
+
+/**
+ * @openapi
+ * /api/saveAllGuids:
  *   post:
- *     summary: Create a new UUID entry
- *     description: Creates a new UUID entry with a JSON schema and expiration
+ *     summary: Save all GUIDs
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/UUIDEntry'
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
+ *       '500':
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
+ */
+
+/**
+ * @openapi
+ * /api/getAllInvitationLinks:
+ *   get:
+ *     summary: Get all invitation links
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *       '500':
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
+ */
+
+/**
+ * @openapi
+ * /api/saveAllInvitationLinks:
+ *   post:
+ *     summary: Save all invitation links
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               uuid:
- *                 type: string
- *                 format: uuid
- *               jsonSchema:
- *                 type: object
- *               expiresAt:
- *                 type: string
- *                 format: date-time
+ *             additionalProperties:
+ *               type: string
  *     responses:
- *       201:
- *         description: UUID entry created successfully
+ *       '200':
+ *         description: Successful response
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 uuid:
- *                   type: string
- *       500:
- *         description: Error creating UUID entry
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
+ *       '500':
+ *         description: Internal Server Error
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                 details:
- *                   type: string
+ *               $ref: '#/components/schemas/UUIDEntryResponse'
  */
-router.post('/create', createUUIDEntry);
+
+import Router from '@koa/router';
+import { getAllGuids, saveAllGuids, getAllInvitationLinks, saveAllInvitationLinks } from '../controllers/uuidController';
+
+const router = new Router();
+
+router.get('/getAllGuids', getAllGuids);
+router.post('/saveAllGuids', saveAllGuids);
+router.get('/getAllInvitationLinks', getAllInvitationLinks);
+router.post('/saveAllInvitationLinks', saveAllInvitationLinks);
 
 export default router;

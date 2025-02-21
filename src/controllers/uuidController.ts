@@ -1,65 +1,59 @@
 import { Context } from 'koa';
 import UUIDEntry from '../models/UUIDEntry';
-import {
-  UUIDValidationResponse,
-  CreateUUIDEntryRequest
-} from '../types';
+import Customer from '../models/Customer';
 
-export const validateUUID = async (ctx: Context): Promise<void> => {
-  const { uuid } = ctx.params;
-
+export const getAllGuids = async (ctx: Context) => {
   try {
-    const entry = await UUIDEntry.findOne({
-      uuid,
-      expiresAt: { $gt: new Date() },
-      resolvedAt: null
-    });
-
-    if (!entry) {
-      ctx.status = 404;
-      ctx.body = {
-        valid: false,
-        message: 'UUID is invalid, expired, or already resolved'
-      } as UUIDValidationResponse;
-      return;
-    }
-
+    const uuidEntries = await UUIDEntry.find({});
     ctx.status = 200;
-    ctx.body = {
-      valid: true,
-      jsonSchema: entry.jsonSchema
-    } as UUIDValidationResponse;
-  } catch (error) {
+    ctx.body = { success: true, data: uuidEntries };
+  } catch (error: any) {
     ctx.status = 500;
-    ctx.body = {
-      error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    };
+    ctx.body = { success: false, message: error.message };
   }
 };
 
-export const createUUIDEntry = async (ctx: Context): Promise<void> => {
-  const { uuid, jsonSchema, expiresAt } = ctx.request.body as CreateUUIDEntryRequest;
-
+export const saveAllGuids = async (ctx: Context) => {
   try {
-    const newEntry = new UUIDEntry({
-      uuid,
-      jsonSchema,
-      expiresAt: new Date(expiresAt)
-    });
-
-    await newEntry.save();
-
-    ctx.status = 201;
-    ctx.body = {
-      message: 'UUID entry created successfully',
-      uuid: newEntry.uuid
-    };
-  } catch (error) {
+    const uuidEntries = ctx.request.body as typeof UUIDEntry[];
+    await UUIDEntry.insertMany(uuidEntries);
+    ctx.status = 200;
+    ctx.body = { success: true, message: 'GUIDs saved successfully' };
+  } catch (error: any) {
     ctx.status = 500;
-    ctx.body = {
-      error: 'Could not create UUID entry',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    };
+    ctx.body = { success: false, message: error.message };
+  }
+};
+
+export const getAllInvitationLinks = async (ctx: Context) => {
+  try {
+    const customers = await Customer.find({}, { customerId: 1, 'formData.guid': 1 });
+    const invitationLinks: Record<string, string> = {};
+    customers.forEach((customer) => {
+      invitationLinks[customer.customerId] = customer.formData.guid;
+    });
+    ctx.status = 200;
+    ctx.body = { success: true, data: invitationLinks };
+  } catch (error: any) {
+    ctx.status = 500;
+    ctx.body = { success: false, message: error.message };
+  }
+};
+
+export const saveAllInvitationLinks = async (ctx: Context) => {
+  try {
+    const invitationLinks = ctx.request.body;
+    const bulkUpdates = Object.entries(invitationLinks as any ).map(([customerId, guid]) => ({
+      updateOne: {
+        filter: { customerId },
+        update: { 'formData.guid': guid }
+      }
+    }));
+    await Customer.bulkWrite(bulkUpdates);
+    ctx.status = 200;
+    ctx.body = { success: true, message: 'Invitation links saved successfully' };
+  } catch (error: any) {
+    ctx.status = 500;
+    ctx.body = { success: false, message: error.message };
   }
 };

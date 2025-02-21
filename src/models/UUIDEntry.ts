@@ -1,26 +1,17 @@
-import mongoose from 'mongoose';
-import { IUUIDEntry } from '../types';
+import mongoose, { Schema, Document } from 'mongoose';
 
-const UUIDEntrySchema = new mongoose.Schema<IUUIDEntry>({
-  uuid: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  jsonSchema: {
-    type: Object,
-    required: true
-  },
-  expiresAt: {
-    type: Date,
-    required: true
-  },
-  resolvedAt: {
-    type: Date,
-    default: null
-  }
-}, { 
-  timestamps: true 
+export interface IUUIDEntry extends Document {
+  guid: string;
+  timestamp: number;
+  name: string;
+  email: string;
+}
+
+const UUIDEntrySchema: Schema = new Schema({
+  guid: { type: String, required: true, unique: true },
+  timestamp: { type: Number, required: true },
+  name: { type: String, required: true },
+  email: { type: String, required: true }
 });
 
 export default mongoose.model<IUUIDEntry>('UUIDEntry', UUIDEntrySchema);

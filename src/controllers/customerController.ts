@@ -30,6 +30,7 @@ export const getCustomerById = async (ctx: Context) => {
 };
 
 export const getAllCustomers = async (ctx: Context) => {
+  console.log('getAllCusetomen ')
   try {
     const customers = await Customer.find({});
     ctx.status = 200;
