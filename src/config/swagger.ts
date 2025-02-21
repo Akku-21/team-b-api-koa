@@ -14,7 +14,7 @@ const swaggerDefinition = {
       description: 'Local development server'
     },
     {
-      url: 'http://team-b-api-koa-production.up.railway.app',
+      url: 'https://team-b-api-koa-production.up.railway.app',
       description: 'production server'
     }
   ]
