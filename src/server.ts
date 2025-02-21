@@ -20,7 +20,7 @@ connectDB();
 app.use(bodyParser());
 
 // Swagger JSON route
-router.get('/swagger.json', (ctx) => {
+router.get('/swagger.json', (ctx: Koa.Context) => {
   ctx.body = swaggerSpec;
 });
 
@@ -29,7 +29,7 @@ const swaggerUiDistPath = path.dirname(require.resolve('swagger-ui-dist'));
 app.use(serve(swaggerUiDistPath));
 
 // Custom Swagger UI HTML
-router.get('/docs', (ctx) => {
+router.get('/docs', (ctx: Koa.Context) => { // <-- Specify the type of 'ctx' as Koa.Context
   ctx.type = 'html';
   ctx.body = `
     <!DOCTYPE html>

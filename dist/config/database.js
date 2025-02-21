@@ -4,10 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo:LWgoIXEKztAiGBjlfAIJVVoEtLZqfGdL@maglev.proxy.rlwy.net:28405';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo:PeeIiQrVuAgsqXVgYJnwYupVAabxmSAg@crossover.proxy.rlwy.net:17477';
 const connectDB = async () => {
     try {
-        console.log('start connection');
         await mongoose_1.default.connect(MONGO_URI, {
             // @ts-ignore
             useNewUrlParser: true,
