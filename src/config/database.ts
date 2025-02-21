@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo:PeeIiQrVuAgsqXVgYJnwYupVAabxmSAg@crossover.proxy.rlwy.net:17477';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo:LWgoIXEKztAiGBjlfAIJVVoEtLZqfGdL@maglev.proxy.rlwy.net:28405';
 
 const connectDB = async (): Promise<void> => {
   try {
+		console.log('start connection')
     await mongoose.connect(MONGO_URI, {
       // @ts-ignore
       useNewUrlParser: true,

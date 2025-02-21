@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @openapi
  * components:
@@ -30,7 +31,10 @@
  *           type: string
  *           format: date-time
  */
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @openapi
  * /api/customers:
@@ -61,7 +65,6 @@
  *               items:
  *                 $ref: '#/components/schemas/CustomerResponse'
  */
-
 /**
  * @openapi
  * /api/customers/{customerId}:
@@ -96,15 +99,11 @@
  *       '404':
  *         description: Customer not found
  */
-
-import Router from '@koa/router';
-import { createCustomer, getCustomerById, getAllCustomers, deleteCustomerById } from '../controllers/customerController';
-
-const router = new Router();
-
-router.post('/customers', createCustomer);
-router.get('/customers/:customerId', getCustomerById);
-router.get('/customers', getAllCustomers);
-router.delete('/customers/:customerId', deleteCustomerById);
-
-export default router;
+const router_1 = __importDefault(require("@koa/router"));
+const customerController_1 = require("../controllers/customerController");
+const router = new router_1.default();
+router.post('/customers', customerController_1.createCustomer);
+router.get('/customers/:customerId', customerController_1.getCustomerById);
+router.get('/customers', customerController_1.getAllCustomers);
+router.delete('/customers/:customerId', customerController_1.deleteCustomerById);
+exports.default = router;
