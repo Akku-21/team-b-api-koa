@@ -3,7 +3,7 @@ import Customer from '../models/Customer';
 
 export const createCustomer = async (ctx: Context) => {
   try {
-    const customer = new Customer(ctx.request.body);
+    const customer = new Customer(ctx.request.body as any);
     await customer.save();
     ctx.status = 201;
     ctx.body = { success: true, message: 'Data saved successfully' };
