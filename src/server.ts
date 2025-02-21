@@ -6,6 +6,7 @@ import path from 'path';
 
 import connectDB from './config/database';
 import uuidRoutes from './routes/uuidRoutes';
+import customerRoutes from './routes/customerRoutes';
 import swaggerSpec from './config/swagger';
 
 const app = new Koa();
@@ -61,6 +62,7 @@ router.get('/docs', (ctx) => {
 
 // API Routes
 router.use('/api', uuidRoutes.routes(), uuidRoutes.allowedMethods());
+router.use('/api', customerRoutes.routes(), customerRoutes.allowedMethods());
 app.use(router.routes()).use(router.allowedMethods());
 
 const server = app.listen(PORT, () => {
